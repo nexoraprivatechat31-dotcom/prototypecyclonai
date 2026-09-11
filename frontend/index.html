@@ -367,6 +367,7 @@
               <div class="relative">
                 <select id="stormSelect" onchange="onSelectStorm()" class="w-full appearance-none bg-slate-50 hover:bg-slate-100/80 border-2 border-slate-200 hover:border-sky-400 focus:border-sky-600 focus:bg-white focus:ring-4 focus:ring-sky-100 rounded-xl py-2.5 pl-3.5 pr-10 text-xs font-black text-slate-900 focus:outline-none transition-all cursor-pointer font-mono shadow-xs">
                   <option value="custom">Active Storm (Live Atmospheric &amp; Marine Feed)</option>
+                  <option value="genesis">Cyclone Genesis Lifecycle Simulation (LPA &rarr; Depression &rarr; Severe Cyclone &rarr; Landfall)</option>
                   <option value="biparjoy">Cyclone Biparjoy (June 2023 • NOAA: 2023157N12066 • Jakhau Landfall)</option>
                   <option value="tauktae">Cyclone Tauktae (May 2021 • NOAA: 2021134N10073 • Diu Landfall)</option>
                   <option value="vayu">Cyclone Vayu (June 2019 • NOAA: 2019161N11071 • Saurashtra Skirt)</option>
@@ -527,6 +528,44 @@
                 </div>
               </div>
 
+            </div>
+
+            <!-- CYCLONE GENESIS & INTENSIFICATION SIMULATOR (વાવાઝોડું ધીમે ધીમે બનવું) -->
+            <div class="card-pro p-4 rounded-xl space-y-3.5 border-2 border-emerald-500 shadow-md bg-gradient-to-br from-emerald-50/30 via-white to-sky-50/30">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2.5 flex-wrap gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-black font-mono">FORMATION SIMULATOR</span>
+                    <h3 class="text-sm font-black uppercase text-slate-900 tracking-wider">Cyclone Genesis &amp; Growth</h3>
+                  </div>
+                  <p class="text-xs text-slate-500 font-medium mt-0.5">Watch the storm gradually form and intensify step-by-step</p>
+                </div>
+                <button onclick="toggleGenesisSimulation()" id="btnGenesisPlay" class="px-3.5 py-1.5 text-xs font-black rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow-sm transition-all font-mono">
+                  <i class="fa-solid fa-play text-xs" id="genesisPlayIcon"></i>
+                  <span id="genesisPlayText">Simulate Formation</span>
+                </button>
+              </div>
+
+              <!-- 6 Stages Stepper Bar -->
+              <div class="space-y-1.5 font-mono text-xs">
+                <div class="flex justify-between items-center text-[11px] font-bold">
+                  <span class="text-slate-600">Evolution Stage:</span>
+                  <span id="genesisStageBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-black">Stage 1/6: Low Pressure Area (38 km/h | 1008 hPa)</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                  <div id="genesisProgressBar" class="bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-600 h-2.5 rounded-full transition-all duration-700" style="width: 16%"></div>
+                </div>
+                <!-- Quick Stage Buttons -->
+                <div class="grid grid-cols-6 gap-1 pt-1 text-[10px] font-black text-center">
+                  <button onclick="jumpToGenesisStage(0)" class="genesis-step-btn p-1.5 rounded-lg bg-emerald-600 text-white border border-emerald-700 shadow-2xs transition-all" id="gen-step-0">1. LPA</button>
+                  <button onclick="jumpToGenesisStage(1)" class="genesis-step-btn p-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all" id="gen-step-1">2. Depr</button>
+                  <button onclick="jumpToGenesisStage(2)" class="genesis-step-btn p-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all" id="gen-step-2">3. Deep</button>
+                  <button onclick="jumpToGenesisStage(3)" class="genesis-step-btn p-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all" id="gen-step-3">4. Storm</button>
+                  <button onclick="jumpToGenesisStage(4)" class="genesis-step-btn p-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all" id="gen-step-4">5. Severe</button>
+                  <button onclick="jumpToGenesisStage(5)" class="genesis-step-btn p-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs transition-all" id="gen-step-5">6. Hit</button>
+                </div>
+              </div>
             </div>
 
             <!-- METEOROLOGICAL ADJUSTMENTS -->
@@ -1780,6 +1819,7 @@
     // Storm Presets (Authentic IMD & NOAA Archival Starting Parameters)
     const presets = {
       custom: { wind: 125, pres: 965, sst: 30.5, spd: 14, lat: 19.20, lon: 67.50 },
+      genesis: { wind: 38, pres: 1008, sst: 30.5, spd: 12, lat: 17.50, lon: 66.80 },
       biparjoy: { wind: 165, pres: 958, sst: 31.0, spd: 12, lat: 19.50, lon: 66.80 },
       tauktae: { wind: 185, pres: 935, sst: 31.2, spd: 16, lat: 18.20, lon: 71.70 },
       vayu: { wind: 150, pres: 970, sst: 30.0, spd: 14, lat: 18.70, lon: 70.30 },
@@ -1796,6 +1836,10 @@
 
     function onSelectStorm() {
       const val = document.getElementById('stormSelect').value;
+      if (val === 'genesis') {
+        jumpToGenesisStage(0);
+        return;
+      }
       const storm = presets[val] || presets.custom;
       document.getElementById('input-wind').value = storm.wind;
       document.getElementById('input-pres').value = storm.pres;
@@ -3078,6 +3122,134 @@
       if (select) {
         select.value = stormKey;
         onSelectStorm();
+      }
+    }
+
+    // 14. Cyclone Genesis & Intensification Simulation Engine (વાવાઝોડું ધીમે ધીમે બનવું અને વધવું)
+    const genesisStages = [
+      {
+        idx: 0,
+        name: "Low Pressure Area",
+        wind: 38,
+        pres: 1008,
+        sst: 30.5,
+        lat: 17.50,
+        lon: 66.80,
+        stageBadge: "Stage 1/6: Low Pressure Area (38 km/h | 1008 hPa)",
+        note: "Warm ocean (SST 30.5°C) initiates low-level convergence; scattered rotating cloud cluster in central Arabian Sea."
+      },
+      {
+        idx: 1,
+        name: "Depression Formed",
+        wind: 52,
+        pres: 998,
+        sst: 30.8,
+        lat: 18.50,
+        lon: 67.20,
+        stageBadge: "Stage 2/6: Depression Formed (52 km/h | 998 hPa)",
+        note: "Central pressure drops to 998 hPa; organized spiral rain bands start rotating counter-clockwise. Signal 1 hoisted."
+      },
+      {
+        idx: 2,
+        name: "Deep Depression",
+        wind: 62,
+        pres: 990,
+        sst: 31.0,
+        lat: 19.50,
+        lon: 67.60,
+        stageBadge: "Stage 3/6: Deep Depression (62 km/h | 990 hPa)",
+        note: "Upgraded to Deep Depression. Squally winds and rough seas detected by Buoy CB02. Small craft advised to seek harbor."
+      },
+      {
+        idx: 3,
+        name: "Cyclonic Storm",
+        wind: 85,
+        pres: 980,
+        sst: 31.2,
+        lat: 20.60,
+        lon: 68.00,
+        stageBadge: "Stage 4/6: Cyclonic Storm (85 km/h | 980 hPa)",
+        note: "Named Cyclonic Storm. Central eye wall begins carving out on INSAT-3D radiometer. Harbor Signal 7 & 8 active."
+      },
+      {
+        idx: 4,
+        name: "Very Severe Cyclone",
+        wind: 140,
+        pres: 960,
+        sst: 31.4,
+        lat: 21.80,
+        lon: 68.40,
+        stageBadge: "Stage 5/6: Very Severe Cyclone (140 km/h | 960 hPa)",
+        note: "Rapid Intensification (RI) active. Central eye clearly defined. Extreme storm surge approaching Saurashtra and Kutch."
+      },
+      {
+        idx: 5,
+        name: "Peak Landfall Strike",
+        wind: 165,
+        pres: 955,
+        sst: 30.8,
+        lat: 23.23,
+        lon: 68.73,
+        stageBadge: "Stage 6/6: Peak Landfall Strike (165 km/h | Signal 10)",
+        note: "Direct coastal strike at Jakhau Port. Peak surge 5.2m. Signal 10 hoisted; complete port evacuation affirmed."
+      }
+    ];
+
+    let currentGenesisStage = 0;
+    let genesisSimulationInterval = null;
+
+    function jumpToGenesisStage(idx) {
+      currentGenesisStage = idx;
+      const s = genesisStages[idx];
+      if (!s) return;
+
+      document.getElementById('input-wind').value = s.wind;
+      document.getElementById('input-pres').value = s.pres;
+      document.getElementById('input-sst').value = s.sst;
+      activeLat = s.lat;
+      activeLon = s.lon;
+
+      const badge = document.getElementById('genesisStageBadge');
+      if (badge) badge.innerText = s.stageBadge;
+
+      const bar = document.getElementById('genesisProgressBar');
+      if (bar) bar.style.width = Math.round(((idx + 1) / genesisStages.length) * 100) + '%';
+
+      for (let i = 0; i < 6; i++) {
+        const b = document.getElementById(`gen-step-${i}`);
+        if (b) {
+          if (i === idx) {
+            b.className = "genesis-step-btn p-1.5 rounded-lg bg-emerald-600 text-white border border-emerald-700 shadow-sm font-black";
+          } else {
+            b.className = "genesis-step-btn p-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs font-bold";
+          }
+        }
+      }
+
+      if (typeof map !== 'undefined') {
+        map.flyTo([s.lat, s.lon], 6, { animate: true, duration: 0.8 });
+      }
+
+      runPrediction();
+    }
+
+    function toggleGenesisSimulation() {
+      const btn = document.getElementById('genesisPlayText');
+      const icon = document.getElementById('genesisPlayIcon');
+
+      if (genesisSimulationInterval) {
+        clearInterval(genesisSimulationInterval);
+        genesisSimulationInterval = null;
+        if (btn) btn.innerText = "Simulate Formation";
+        if (icon) icon.className = "fa-solid fa-play text-xs";
+      } else {
+        if (btn) btn.innerText = "Pause Formation";
+        if (icon) icon.className = "fa-solid fa-pause text-xs";
+
+        genesisSimulationInterval = setInterval(() => {
+          currentGenesisStage = (currentGenesisStage + 1) % genesisStages.length;
+          jumpToGenesisStage(currentGenesisStage);
+        }, 2400);
       }
     }
 
