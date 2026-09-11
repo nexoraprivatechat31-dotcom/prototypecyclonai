@@ -223,7 +223,47 @@ To bridge operational 24x7 ocean surveillance with historical benchmark analytic
 
 ---
 
-## 13. Code Quality & Compliance Checklist
+## 13. Multispectral Satellite Cloud Scanner & Geographic Location Synchronization
+
+The Satellite Cloud Scanner (View 5) provides real-time and historical multi-spectral radiometer analysis calibrated against real-world geographical coordinates:
+
+### 13.1 Storm Geographic Place Profiles & Center Calibration
+Every storm in the system is tied to an authentic geographical epicenter, heading, coastal impact zone, and radiometer parameters:
+- **Cyclone Biparjoy**: `19.50°N, 66.80°E` | Heading NNE towards Jakhau Port, Kutch, Gujarat | Eye: 35 km | Shield: 480 km
+- **Cyclone Tauktae**: `18.20°N, 71.50°E` | Heading N towards Una / Diu coast, Saurashtra | Eye: 42 km | Shield: 540 km
+- **Cyclone Vayu**: `19.10°N, 69.80°E` | Heading NNW skirting Veraval & Porbandar coast | Eye: 30 km | Shield: 420 km
+- **Cyclone Asna**: `23.40°N, 68.60°E` | Heading WSW over Kutch coastline into Arabian Sea | Eye: 25 km | Shield: 340 km
+- **Cyclone Nisarga**: `17.80°N, 72.40°E` | Heading NNE towards Raigad & Alibag, Maharashtra | Eye: 28 km | Shield: 390 km
+- **1998 Gujarat Super Cyclone**: `20.50°N, 69.20°E` | Heading NNE directly striking Kandla Port | Eye: 48 km | Shield: 610 km
+- **Arabian Sea Live Basin Sentinel**: `19.80°N, 68.40°E` | Central Arabian Sea Deep-Water Sentinel Buoy AD01 | Eye: Open Waters | Shield: Ambient Trade Cumulus
+
+### 13.2 Dual Scanner Modes
+1. **GIS Real-World Satellite Radar**:
+   - Integrated Leaflet map utilizing Esri World Imagery (high-resolution true-color satellite ortho-photography) overlaid with international and state administrative boundaries.
+   - Centers dynamically on `[activeLat, activeLon]` with smooth pan and zoom animations.
+   - Renders multi-layer rotating convective vortex rings directly above the real storm coordinates, indicating the convective core, eyewall boundary, and feeder spiral rain bands relative to actual Gujarat and western Indian coastlines.
+2. **Multispectral Heat & Cloud Radiometer Channels**:
+   - **TIR-1 Heat Cam (10.8 µm)**: Measures cloud-top brightness temperature using enhanced infrared thermography, identifying deep convective towers down to -82 °C.
+   - **WV Water Vapor (6.8 µm)**: Scans upper-tropospheric moisture plumes and subsidence dry slots.
+   - **Day/Visible Cam (0.65 µm)**: High-resolution visual albedo channel for cloud-top shadow and texture inspection.
+   - **Dvorak BD-Curve**: IMD/NOAA enhanced infrared grayscale-to-color lookup curve for objective Dvorak T-number evaluation.
+
+### 13.3 Interactive Radiometer Pixel Probe
+- Users can hover their cursor over the satellite scanner to interrogate any cloud pixel.
+- The radiometer engine dynamically calculates:
+  1. Exact latitude and longitude `(pLat, pLon)` relative to the storm center.
+  2. Exact radial distance in kilometers from the cyclone eye.
+  3. Calibrated cloud-top temperature (°C) following the physical profile:
+     - **Warm Eye Center**: -14 °C to -18 °C (convective clearing / downdraft subsidence).
+     - **Eyewall Convective Tower**: -75 °C to -85 °C (severe updrafts piercing the tropopause).
+     - **Inner Spiral Rain Bands**: -50 °C to -68 °C (heavy precipitation cells).
+     - **Outer Cirrus Outflow**: -22 °C to -38 °C (high-altitude anvil shield).
+     - **Open Ocean / Sea Surface**: Ambient SST (+27.0 °C to +31.5 °C).
+- Instant in-view storm switcher dropdown (`#satStormSelect`) ensures seamless synchronization between the Satellite Scanner and the global mission control dashboard.
+
+---
+
+## 14. Code Quality & Compliance Checklist
 
 | Quality Criterion | Compliance Status | Implementation Detail |
 | :--- | :--- | :--- |
@@ -236,4 +276,5 @@ To bridge operational 24x7 ocean surveillance with historical benchmark analytic
 
 ---
 *Audit Date: September 11, 2026 | CycloneAI Mission Control System Audit Certified Complete*
+
 
