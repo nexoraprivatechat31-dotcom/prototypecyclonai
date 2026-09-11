@@ -184,7 +184,27 @@ Real-time latency and payload benchmarks verified across all 6 production endpoi
 
 ---
 
-## 9. Code Quality & Compliance Checklist
+## 10. Cyclone Genesis & Intensification Simulation Engine
+
+To dynamically demonstrate the lifecycle of a tropical cyclone from nascent disturbance to landfall, CycloneAI features an automated 6-stage **Cyclogenesis Simulation Engine**:
+
+```text
+Stage 1: Low Pressure Area (LPA) [38 km/h | 1008 hPa] -> Central Arabian Sea
+Stage 2: Depression Formed        [52 km/h |  998 hPa] -> Spiral rain bands organize
+Stage 3: Deep Depression          [62 km/h |  990 hPa] -> Squall warnings initiated
+Stage 4: Cyclonic Storm (Named)   [85 km/h |  980 hPa] -> Eye wall formation starts
+Stage 5: Very Severe Cyclone (RI) [140 km/h|  960 hPa] -> Rapid intensification
+Stage 6: Peak Coastal Landfall    [165 km/h|  955 hPa] -> Jakhau Strike / Signal 10
+```
+
+- **Dynamic State Synchronization**:
+  With each stage transition, the central barometric pressure, sustained wind speed, sea surface temperature, WMO category badge, rapid intensification trigger, 48-hour prediction curves, and Leaflet geospatial vortex marker dynamically update in real time.
+- **Automated Lifecycle Playback**:
+  An interactive `Simulate Formation` controller allows synoptic timesteps to auto-advance every 2.4 seconds, accompanied by a dynamic progress bar and discrete stage selector pills.
+
+---
+
+## 11. Code Quality & Compliance Checklist
 
 | Quality Criterion | Compliance Status | Implementation Detail |
 | :--- | :--- | :--- |
@@ -197,3 +217,4 @@ Real-time latency and payload benchmarks verified across all 6 production endpoi
 
 ---
 *Audit Date: September 11, 2026 | CycloneAI Mission Control System Audit Certified Complete*
+
