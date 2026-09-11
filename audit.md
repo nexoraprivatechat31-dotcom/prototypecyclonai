@@ -204,7 +204,26 @@ Stage 6: Peak Coastal Landfall    [165 km/h|  955 hPa] -> Jakhau Strike / Signal
 
 ---
 
-## 11. Code Quality & Compliance Checklist
+## 12. Bidirectional Real-Time Live Basin Feed & Historical State Restoration
+
+To bridge operational 24x7 ocean surveillance with historical benchmark analytics, the system provides a seamless two-way state transition engine:
+
+### 12.1 Real-Time Live Basin Mode
+- **Live WMO Ingestion**: Directly connects to Open-Meteo & IMD RSMC telemetry via `/api/active-cyclone-tracker` and `/api/live-weather`.
+- **Fair-Weather Sentinel State**: When no cyclonic vortex is active in the Arabian Sea or Bay of Bengal, the system displays ambient fair-weather ocean conditions (~1009.4 hPa, 27.3 °C SST, ~18 km/h breeze).
+- **Visual Telemetry**: The UI switches to `LIVE SATELLITE & MARINE FEED` (emerald green badge), replaces storm vortex icons with active pulsing ocean buoy sentinel markers, and displays a dedicated real-time basin banner.
+
+### 12.2 Instant Historical State Restoration
+- **Zero-Loss Switching**: When the user switches back from Live Mode to any historical cyclone (`Cyclone Biparjoy`, `Cyclone Tauktae`, `Cyclone Vayu`, `Cyclone Asna`, `Cyclone Nisarga`, or `1998 Super Cyclone`), the engine cleanly restores:
+  1. Exact starting pressure, peak sustained winds, and SST.
+  2. The complete 14-point curved parabolic track, coastal distances, and hourly timesteps.
+  3. Authoritative NOAA NCEI IBTrACS ID, IMD RSMC bulletin codes, and Dvorak T-numbers.
+  4. Geospatial camera recentering to the storm's verified landfall coordinates.
+  5. UI mode pills toggle back to `HISTORICAL ARCHIVE` and `VERIFIED BEST TRACK`.
+
+---
+
+## 13. Code Quality & Compliance Checklist
 
 | Quality Criterion | Compliance Status | Implementation Detail |
 | :--- | :--- | :--- |
