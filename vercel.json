@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "public": false,
+  "rewrites": [
+    { "source": "/assets/(.*)", "destination": "/frontend/assets/$1" },
+    { "source": "/(.*)", "destination": "/frontend/$1" }
+  ]
+}
